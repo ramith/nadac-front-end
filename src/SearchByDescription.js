@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { useLazyQuery, gql } from '@apollo/client';
+import { useQuery, gql } from '@apollo/client';
 import './SearchByDescription.css';
 
 const FIND_BY_DESCRIPTION = gql`
@@ -15,15 +15,20 @@ const FIND_BY_DESCRIPTION = gql`
 
 function SearchByDescription() {
   const [searchInput, setSearchInput] = useState('');
-  const [findByDescription, { loading, error, data }] = useLazyQuery(FIND_BY_DESCRIPTION);
+  const [triggerQuery, setTriggerQuery] = useState(false);
+
+  const { loading, error, data } = useQuery(FIND_BY_DESCRIPTION, {
+    variables: { description: searchInput },
+    skip: !triggerQuery, // Skip the query until triggerQuery is true
+  });
 
   const handleSearch = () => {
-    findByDescription({ variables: { description: searchInput } });
+    setTriggerQuery(true); // Trigger the query when the search button is clicked
   };
 
   const handleKeyPress = (event) => {
     if (event.key === 'Enter') {
-      handleSearch();
+      setTriggerQuery(true); // Trigger the query when Enter is pressed
     }
   };
 
