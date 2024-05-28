@@ -4,7 +4,7 @@ import { ApolloClient, InMemoryCache, HttpLink } from '@apollo/client';
 const createApolloClient = async () => {
   const apiUrl = window?.configs?.apiUrl ? window.configs.apiUrl : "/";
 
-  const httpLink = new HttpLink({ uri: apiUrl, credentials: 'include'});
+  const httpLink = new HttpLink({ uri: apiUrl, credentials: 'same-origin'});
 
   return new ApolloClient({
     link: httpLink,
